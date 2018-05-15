@@ -67,7 +67,7 @@ while(1):
     for i,(new,old) in enumerate(zip(good_new,good_old)):
         a,b = new.ravel()
         c,d = old.ravel()
-        mask = cv2.line(mask, (a,b),(c,d), color, 20)
+        mask = cv2.line(mask, (a,b),(c,d), color, 30)
 
     # add optical mask
     img = cv2.add(frame,mask)
