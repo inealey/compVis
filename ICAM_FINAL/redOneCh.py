@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import time
+import random
 
 cap = cv2.VideoCapture(0)
 cap.set(3, 854)
@@ -15,13 +16,19 @@ feature_params = dict( maxCorners = 100,
                        minDistance = 7,
                        blockSize = 7 )
 
-# Parameters for lucas kanade optical flow
+# params for lucas kanade optical flow
 lk_params = dict( winSize  = (15,15),
                   maxLevel = 2,
                   criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
 
 # red values
 color = (0, 0, 255)
+
+colorList = [ color, (1, 0, 255), (0, 1, 255) ]
+
+for j in range(1, 30):
+    for k in range(1, 30):
+        colorList.append( (j, k, 255) )
 
 lower = np.array([17, 15, 100])
 upper = np.array([50, 56, 255])
@@ -67,7 +74,8 @@ while(1):
     for i,(new,old) in enumerate(zip(good_new,good_old)):
         a,b = new.ravel()
         c,d = old.ravel()
-        mask = cv2.line(mask, (a,b),(c,d), color, 30)
+        mask = cv2.line(mask, (a,b),(c,d), random.choice(colorList), 30)
+ #       mask = cv2.line(mask, (a,b),(c,d), color, 30)
 
     # add optical mask
     img = cv2.add(frame,mask)
@@ -76,7 +84,7 @@ while(1):
     redMask = cv2.inRange(img, lower, upper)
 
     img = cv2.bitwise_and(img, img, mask = redMask)
-#    img = cv2.bitwise_and(img, img, mask = 255 - redMask)
+ #   img = cv2.bitwise_and(img, img, mask = 255 - redMask)
    
     cv2.namedWindow("flow", cv2.WND_PROP_FULLSCREEN)
     cv2.setWindowProperty("flow", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
@@ -89,5 +97,5 @@ while(1):
     old_gray = frame_gray.copy()
     p0 = good_new.reshape(-1,1,2)
 
-cv2.destroyAllWindows()
 cap.release()
+cv2.destroyAllWindows()
