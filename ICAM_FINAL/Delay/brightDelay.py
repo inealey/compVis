@@ -85,9 +85,12 @@ while ( cap. isOpened() ):
         # draw circle
         cv2.circle(blend, maxLoc, args["radius"], (5, 255, 255), 1)
         
+        retVal, thresh = cv2.threshold(blend, 80, 255, cv2.THRESH_BINARY) 
+        
         cv2.namedWindow("bDelay", cv2.WND_PROP_FULLSCREEN)
         cv2.setWindowProperty("bDelay", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN) 
-        cv2.imshow("bDelay", blend)
+        #cv2.imshow("bDelay", blend)
+        cv2.imshow("bDelay", thresh)
 
         key = cv2.waitKey(25) & 0xFF
         if key == ord("q"):
