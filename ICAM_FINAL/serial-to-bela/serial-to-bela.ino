@@ -49,7 +49,7 @@ void setup() {
 void loop() {
     // read knob
     input = float(analogRead(inKnob)) / 682;
-    if( input >= 0.95 ) { input = 1; }
+    if( input >= 0.95 ) { input = 0.99; }
     inverse = 1 - input;
     
     recvWithStartEndMarkers();
