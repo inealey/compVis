@@ -2,6 +2,7 @@ from CirFrameBuf import CirFrameBuf
 import argparse
 import numpy as np
 import cv2
+import serial
 
 # usage: brightDelay.py -r [radius]
 # construct the argument parse and parse the arguments
@@ -43,7 +44,7 @@ dframe = None
 nfback = 1
 inc = 1
 counter = 0
-
+brightLabel = "one"
 # a lil' string formatter
 def msgFormat( msg, f ):
     tempStr = '<' + msg + ',' + str(f) + '>'
@@ -56,7 +57,7 @@ while ( cap. isOpened() ):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.GaussianBlur(gray, (args["radius"], args["radius"]), 0.5)
         (minVal, maxVal, minLoc, maxLoc) = cv2.minMaxLoc(gray)
-        
+	
         # Write out to the circular buffer
         #cfbuf.write(gray)
         cfbuf.write(frame)
@@ -85,12 +86,12 @@ while ( cap. isOpened() ):
         # draw circle
         cv2.circle(blend, maxLoc, args["radius"], (5, 255, 255), 1)
         
-        retVal, thresh = cv2.threshold(blend, 80, 255, cv2.THRESH_BINARY) 
+        #retVal, thresh = cv2.threshold(blend, 80, 205, cv2.THRESH_BINARY) 
         
-        cv2.namedWindow("bDelay", cv2.WND_PROP_FULLSCREEN)
-        cv2.setWindowProperty("bDelay", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN) 
-        #cv2.imshow("bDelay", blend)
-        cv2.imshow("bDelay", thresh)
+#        cv2.namedWindow("bDelay", cv2.WND_PROP_FULLSCREEN)
+#        cv2.setWindowProperty("bDelay", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN) 
+        cv2.imshow("bDelay", blend)
+        #cv2.imshow("bDelay", thresh)
 
         key = cv2.waitKey(25) & 0xFF
         if key == ord("q"):
